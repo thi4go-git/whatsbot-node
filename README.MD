@@ -17,3 +17,15 @@ que obtém a versão para a seguinte:
 
    Antigo:    const version = indexHtml.match(/manifest-([\d\\.]+)\.json/)[1];
    Ajustado:  const version = indexHtml.match(/manifest-([\d\.]+).json/);
+
+
+#Atualizações do CACHE poderão ser obtidas em:
+https://github.com/wppconnect-team/wa-version/tree/main/html
+
+Esse cache será usado em:
+
+webVersionCache: {
+  type: "remote",
+  remotePath:
+    "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2413.51-beta.html"
+},
