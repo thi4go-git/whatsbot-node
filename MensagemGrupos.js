@@ -5,7 +5,7 @@ const ID_GRUPO_PROJECAO = '120363173447115850@g.us';
 
 function getMensagemGrupo(message){
     if (message.from == ID_GRUPO_PROJECAO){
-      const msgRecebida = message.body.trim().toLowerCase();
+      const msgRecebida = message?.body.trim().toLowerCase();
       if(msgRecebida.toLowerCase() == 'help'){
         return getMsgGrupoProjecao();
       }      
