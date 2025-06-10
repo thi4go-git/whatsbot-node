@@ -1,5 +1,8 @@
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth } = require('whatsapp-web.js');
+const { getMensagemGrupo } = require('./MensagemGrupos');
+const { getMensagemPrivada } = require('./MensagemPrivada');
+
 
 const client = new Client({
   authStrategy: new LocalAuth(),//Reaproveita a autenticação feita pela 1ª vez (pasta criada na raíz)
@@ -25,59 +28,34 @@ client.on('qr', qr => {
 
 //Menagem console log ao conectar.
 client.on('ready', () => {
-  console.log('Client is ready!');
+  console.log('BOT Client is ready!');
 });
+
+
+const MSG_PRIVADA = '@c.us';
+const MSG_GRUPO = '@g.us';
 
 
 // Mapeia o estado atual de cada usuário
 const userState = {};
 
 
-// Repondendo mensagens recebidas com o Boot
+// Repondendo mensagens recebidas com o Boot PRIVADAS / GRUPOS
 client.on('message', async message => {
-  const from = message.from;
+  const fromId = message.from;
 
-  // Ignorar mensagens de grupos
-  if (from.endsWith('@g.us')) return;
-
-  const msg = message.body.trim().toLowerCase();
-
-  if (!userState[from]) {
-    // Estado inicial: enviar menu principal
-    userState[from] = 'menu_principal';
-    await client.sendMessage(from, `Olá! Escolha uma opção:
-      1 - Ver saldo
-      2 - Falar com atendente
-      3 - Sair`
-    );
-    return;
-  }
-
-  switch (userState[from]) {
-    case 'menu_principal':
-      if (msg === '1') {
-        await client.sendMessage(from, 'Seu saldo atual é R$ 250,00.');
-        delete userState[from]; // Reinicia o estado
-      } else if (msg === '2') {
-        await client.sendMessage(from, 'Aguarde, estamos transferindo para um atendente...');
-        delete userState[from];
-      } else if (msg === '3') {
-        await client.sendMessage(from, 'Até logo!');
-        delete userState[from];
-      } else {
-        await client.sendMessage(from, `Opção inválida. Digite:
-          1 - Ver saldo
-          2 - Falar com atendente
-          3 - Sair`
-        );
-      }
-      break;
-    // Aqui você pode adicionar outros estados como submenus, etc.
-
-    default:
-      // Caso o estado seja desconhecido, reinicia
-      delete userState[from];
-      await client.sendMessage(from, 'Algo deu errado. Envie uma nova mensagem para começar novamente.');
+  if (fromId.endsWith(MSG_GRUPO)){     
+    const respostaMsgGrupo = getMensagemGrupo(message);
+    if(respostaMsgGrupo){
+      await client.sendMessage(fromId,respostaMsgGrupo);
+      delete userState[fromId];
+    }    
+    return;  
+  } else if (fromId.endsWith(MSG_PRIVADA)){ 
+    const respostaMsgPrivada = getMensagemPrivada(userState,fromId);
+    await client.sendMessage(fromId,respostaMsgPrivada);
+    delete userState[fromId];   
+    return;  
   }
 
 });
