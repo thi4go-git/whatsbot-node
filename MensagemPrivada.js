@@ -1,8 +1,8 @@
 module.exports = { getMensagemPrivada };
 
 
-function getMensagemPrivada(userState ,fromId,  msgRecebida){ 
-  const msgRecebida = message.body.trim().toLowerCase();
+function getMensagemPrivada(message,userState ,fromId){ 
+  const msgRecebida = message?.body.trim().toLowerCase();
 
   if (!userState[fromId]) {
     // Estado inicial: enviar menu principal
