@@ -2,6 +2,8 @@
 https://wwebjs.dev/guide/creating-your-bot/#replying-to-messages
 
 
+#Execute npm i para instalar as dependências do projeto
+
 #Dependências instaladas no projeto: 
     "puppeteer": "^22.12.1",
     "qrcode-terminal": "^0.12.0",
