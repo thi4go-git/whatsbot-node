@@ -56,7 +56,7 @@ client.on('message', async message => {
     const from = message.from;
     const msg = message.body.trim().toLowerCase();
 
-    if(msg == '1' && msg == '2'){
+    if(msg != '1' && msg != '2'){
       return;  
     }
 
